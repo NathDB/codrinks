@@ -4,6 +4,7 @@ import Accueil from '../views/Accueil.vue'
 import Carte from "@/views/Carte";
 import GoogleMap from "@/components/GoogleMap";
 import FicheCocktail from "@/components/FicheCocktail";
+import CocktailDetails from "@/components/CocktailDetails";
 import Recherche from "@/views/Recherche";
 import Favoris from "@/views/Favoris";
 import Random from "@/views/Random";
@@ -28,7 +29,6 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    // A voir : c'est quoi ça Monsieur ?
     component: Favoris
   },
   {
@@ -40,6 +40,13 @@ const routes = [
     path: '/trouver-un-bar',
     name: 'Carte',
     component: GoogleMap
+  },
+    //Mapping du component et de sa route
+    //On passe en paramètre dans la route l'id du cocktail
+  {
+    path: '/cocktail/:id',
+    name: 'FicheCocktail',
+    component: FicheCocktail,
   }
 
 ]
