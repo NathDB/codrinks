@@ -3,10 +3,11 @@
     <h1 class="text-center m-5">Mes cocktails favoris</h1>
     <p>A venir...</p>
     <div>
-      <b-list-group v-for="favori in listeFavoris">
+      <b-list-group v-for="(favori, n) in listeFavoris">
         <b-list-group-item class="d-flex justify-content-between">
-          {{listeFavoris}}
-          <b-button variant="danger" v-on:click="supprimerFavoris(favori)">Supprimer</b-button>
+          <b-avatar variant="info" :src="favori.strDrinkThumb" class="mr-3"></b-avatar>
+          <span class="fav">{{ favori.strDrink }}</span>
+          <b-button variant="danger" v-on:click="supprimerFavoris(n)">Supprimer</b-button>
         </b-list-group-item>
       </b-list-group>
     </div>
@@ -28,17 +29,23 @@ export default {
       listeFavoris: [],
     }
   },
+  mounted() {
+    if (localStorage.getItem('listeFavoris')) {
+      try {
+        this.listeFavoris = JSON.parse(localStorage.getItem('listeFavoris'));
+      } catch(e) {
+        localStorage.removeItem('listeFavoris');
+      }
+    }
+  },
   methods: {
-    ajouterFavoris(fav) {
-      //ajout du cocktail c à la liste de favoris
-      this.listeFavoris.push(fav)
-      console.log(this.listeFavoris);
-
-    },
     supprimerFavoris(fav) {
       //supprime un cocktail fav de la liste de favoris : fav est l'objet et 1 est le nombre d'objet supprimé
       this.listeFavoris.splice(fav, 1)
+      const parsed = JSON.stringify(this.listeFavoris);
+      localStorage.setItem('listeFavoris', parsed);
       console.log(this.listeFavoris);
+      console.log(localStorage.listeFavoris);
     }
 
   }

@@ -3,7 +3,7 @@
     <div id="nav">
       <b-navbar toggleable="lg" type="dark" variant="info" class="bg-dark">
         <b-navbar-brand href="">
-          <img alt="CO'DRINKS Logo" src="src/assets/logo_navbar.png" class="w-50 p-3">
+          <img alt="CO'DRINKS Logo" src="/logo_navbar.png" class="w-50 p-3">
         </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
@@ -24,7 +24,6 @@
     <router-view/>
   </div>
 </template>
-
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Acme&display=swap');

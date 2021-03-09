@@ -1,43 +1,48 @@
 <template>
   <div class="fiche-cocktails container d-flex p-5 justify-content-center flex-column">
     <h1 class="text-center mb-5">{{cocktail_details.strDrink}}</h1>
-    <div class="d-flex container d-inline m-3 justify-content-center">
-        <div class="d-flex d-inline">
-          <img class="img-thumbnail w-50 p-5 border-0" :src="cocktail_details.strDrinkThumb"/>
-          <div class="d-flex flex-column p-5">
-            <h2>Description</h2>
-            <p>{{cocktail_details.strInstructions}}</p>
-            <p>Use this kind of glass : {{cocktail_details.strGlass}}</p>
-            Ingredients :
-            <ul>
-              <!--AFFICHAGE DES INGREDIENTS AVEC UNE BOUCLE
-                  <li v-for="n in 15">
-                  <p>{{cocktail_details.strIngredient}}{{n}}</p>
-              </li>-->
-              <li>{{cocktail_details.strIngredient1}}</li>
-              <li>{{cocktail_details.strIngredient2}}</li>
-              <li>{{cocktail_details.strIngredient3}}</li>
-              <li>{{cocktail_details.strIngredient4}}</li>
-              <li>{{cocktail_details.strIngredient5}}</li>
-              <li>{{cocktail_details.strIngredient6}}</li>
-              <!--<li v-if="!{{cocktail_details.strIngredient7}}">{{cocktail_details.strIngredient7}}</li>-->
-            </ul>
-          </div>
-
+    <div class="d-flex flex-column container m-3 justify-content-center">
+        <b-img class="img-thumbnail p-5 border-0" fluid-grow :src="cocktail_details.strDrinkThumb"/>
+        <div class="d-flex flex-column p-5">
+          <h2>Description</h2>
+          <p>{{cocktail_details.strInstructions}}</p>
+          <p>Use this kind of glass : {{cocktail_details.strGlass}}</p>
+          Ingredients :
+          <ul>
+            <!--AFFICHAGE DES INGREDIENTS AVEC UNE BOUCLE
+                <li v-for="n in 15">
+                <p>{{cocktail_details.strIngredient}}{{n}}</p>
+            </li>-->
+            <li>{{cocktail_details.strIngredient1}}</li>
+            <li>{{cocktail_details.strIngredient2}}</li>
+            <li>{{cocktail_details.strIngredient3}}</li>
+            <li>{{cocktail_details.strIngredient4}}</li>
+            <li>{{cocktail_details.strIngredient5}}</li>
+            <li>{{cocktail_details.strIngredient6}}</li>
+            <!--<li v-if="!{{cocktail_details.strIngredient7}}">{{cocktail_details.strIngredient7}}</li>-->
+          </ul>
         </div>
-
-      </div>
+      <b-card-group deck class="d-flex justify-content-center m-2 flex-md-wrap">
+        <div v-if="display" v-for="aperette in aperettesListe">
+          <Aperette :aperette="aperette" />
+        </div>
+      </b-card-group>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import Aperette from "@/components/Aperette";
 
 export default {
   name: 'FicheCocktail',
+  components: {Aperette},
+  component:{Aperette},
   data(){
     return{
       cocktail_details:[],
+      aperettesListe:[],
       display:false,
       id:this.$route.params.id
     }
@@ -53,6 +58,19 @@ export default {
         .catch((e) => {
           this.error = "Erreur lors de la récupération des données.";
         });
+    //requete API pour recup les aperette en fonction de l'alcool du cocktail
+    //ici faire la verif alcool aperette = alcool cocktail
+    axios
+        .get('http://212.47.254.140:8000/aperettes')
+        .then(res => {
+            this.aperettesListe = res.data
+            this.display = true
+            console.log(this.aperettesListe)
+        })
+        .catch((e) => {
+          this.error = "Erreur lors de la récupération des données.";
+        });
+
   }
 }
 </script>

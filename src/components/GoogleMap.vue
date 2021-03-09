@@ -23,12 +23,12 @@
     </gmap-map>
     <div class="d-flex justify-content-center p-2 flex-column">
       <h1 class="text-center m-5">Mes bars favoris</h1>
-      <div class="d-flex justify-content-center p-2 d-inline">
+      <div class="d-flex justify-content-center p-2 d-inline flex-wrap">
         <b-card-group v-for="bar in listeBars">
           <b-card tag="bar" style="max-width: 20rem;" class="m-3 d-flex justify-content-center">
             <b-card-title class="text-center">{{bar.name}}</b-card-title>
-            <p v-if="bar.opening_hours['open_now'] = true " class="danger">Fermé</p>
-            <p v-else class="succes">Ouvert en ce moment</p>
+<!--            <p v-if="bar.opening_hours['open_now'] = true " class="danger">Fermé</p>
+            <p v-else class="succes">Ouvert en ce moment</p>-->
             <img class="img-thumbnail justify-content-center" :src="bar.icon"/>
             <p>{{bar.international_phone_number}}</p>
             <p>Commentaire rédigé par : {{bar.reviews[0]['author_name']}}</p>
@@ -59,6 +59,13 @@ export default {
   // Géolocalisation automatique de l'utilisateur après compilation du code
   mounted() {
     this.geolocate();
+    if (localStorage.getItem('listeBars')) {
+      try {
+        this.listeBars = JSON.parse(localStorage.getItem('listeBars'));
+      } catch(e) {
+        localStorage.removeItem('listeBars');
+      }
+    }
   },
 
   methods: {
@@ -77,8 +84,11 @@ export default {
         this.markers.push({ position: marker });
         this.places.push(this.currentPlace);
         this.listeBars.push(this.currentPlace);
+        const parsed = JSON.stringify(this.listeBars);
+        localStorage.setItem('listeBars', parsed);
         this.center = marker;
         this.currentPlace = null;
+        console.log(this.listeBars)
       }
     },
     //Géolocalision de l'utilisateur : situe la position de l'utilisateur et centre la map sur sa position
@@ -90,21 +100,6 @@ export default {
         };
       });
     }
-    /*const app = new Vue({
-      el: '#app',
-      data: {
-        name: ''
-      },
-      mounted() {
-        if (localStorage.name) {
-          this.name = localStorage.name;
-        }
-      },
-      watch: {
-        name(newName) {
-          localStorage.name = newName;
-        }
-      }*/
   }
 };
 </script>

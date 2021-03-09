@@ -7,14 +7,14 @@
         class="mb-2 d-flex"
     >
       <img class="img-thumbnail" :src="cocktail.strDrinkThumb"/>
-      <div class="primary">
-<!--        Route vers le component FicheCocktail (= cocktail/) avec l'ID en paramètre-->
-        <router-link variant="outline-primary" :to="'cocktail/' + cocktail.idDrink">
+      <b-button class="primary" variant="outline-primary">
+        <!--        Route vers le component FicheCocktail (= cocktail/) avec l'ID en paramètre-->
+        <router-link :to="'cocktail/' + cocktail.idDrink">
           Consulter la fiche cocktail
         </router-link>
 
-      </div>
-      <b-button href="#" class="m-1" variant="danger" data-toggle="button" v-on:click="ajouterFavoris(cocktail)"><b-icon-heart></b-icon-heart></b-button>
+      </b-button>
+      <b-button href="#" class="m-1" :variant="alertvariant" v-on:click="ajouterFavoris(cocktail)"><b-icon-heart></b-icon-heart></b-button>
     </b-card>
   </div>
 
@@ -32,21 +32,33 @@ export default {
     nomCocktail: "",
     imageCocktail: "",
     idCocktail:"",
-    fav:""
   },
   data(){
     return{
       cocktail_details:[],
       display:false,
+      listeFavoris: [],
+      alertvariant:"outline-danger",
+    }
+  },
+  mounted() {
+    if (localStorage.getItem('listeFavoris')) {
+      try {
+        this.listeFavoris = JSON.parse(localStorage.getItem('listeFavoris'));
+      } catch(e) {
+        localStorage.removeItem('listeFavoris');
+      }
     }
   },
   methods: {
-    // On requête l'API pour aller chercher les détails du cocktail sur lequel on a cliqué (en fct de son id)
-
-    // Amélioration possible : en cours...
     ajouterFavoris(fav) {
-      this.$emit("ajouter-favoris", fav)
-      console.log(this.listeFavoris);
+      //ajout du cocktail c à la liste de favoris
+      if (!this.listeFavoris.find(x => x === fav)){
+        this.listeFavoris.push(fav)
+        const parsed = JSON.stringify(this.listeFavoris);
+        localStorage.setItem('listeFavoris', parsed);
+        this.alertvariant = "danger";
+      }
 
     },
   }

@@ -5,7 +5,7 @@
       <h2 class="text-center m-5">LES BOISSONS 100% CONNECTEES !</h2>
       <div class="container d-flex flex-column">
         <h3 class="text-center">Que voulez-vous boire ?</h3>
-        <div class="d-flex justify-content-center flex-row">
+        <div class="d-flex justify-content-center flex-row flex-wrap">
           <b-button class="m-1" variant="outline-info" v-on:click="rechercherParAlcool(alcool[0])">Vodka</b-button>
           <b-button class="m-1" variant="outline-info" v-on:click="rechercherParAlcool(alcool[1])">Rhum</b-button>
           <b-button class="m-1" variant="outline-info" v-on:click="rechercherParAlcool(alcool[2])">Tequila</b-button>
@@ -17,7 +17,7 @@
 
       </b-col>
     <div class="justify-content-center d-flex flex-column">
-      <b-card-group deck class="d-flex justify-content-center m-2 flex-md-wrap">
+      <b-card-group deck class="d-flex justify-content-center m-2 flex-wrap">
         <div v-if="display" v-for="cocktail in cocktails">
           <CocktailDetails :cocktail="cocktail"/>
         </div>
