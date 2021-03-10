@@ -53,15 +53,20 @@ export default {
   methods: {
     ajouterFavoris(fav) {
       //ajout du cocktail c à la liste de favoris
-      if (!this.listeFavoris.find(x => x === fav)){
-        this.listeFavoris.push(fav)
+      let if_exists = this.listeFavoris.some(function(item) {
+        return item.strDrink === fav.strDrink
+      });
+      if(!if_exists){
+        this.listeFavoris.push(fav);
         const parsed = JSON.stringify(this.listeFavoris);
         localStorage.setItem('listeFavoris', parsed);
         this.alertvariant = "danger";
+        console.log(this.listeFavoris)
+      }
+
       }
 
     },
-  }
 }
 </script>
 

@@ -24,7 +24,7 @@
     <div class="d-flex justify-content-center p-2 flex-column">
       <h1 class="text-center m-5">Mes bars favoris</h1>
       <div class="d-flex justify-content-center p-2 d-inline flex-wrap">
-        <b-card-group v-for="bar in listeBars">
+        <b-card-group v-for="(bar, n) in listeBars">
           <b-card tag="bar" style="max-width: 20rem;" class="m-3 d-flex justify-content-center">
             <b-card-title class="text-center">{{bar.name}}</b-card-title>
 <!--            <p v-if="bar.opening_hours['open_now'] = true " class="danger">Fermé</p>
@@ -35,6 +35,7 @@
             <p class="font-italic">{{bar.reviews[0]['relative_time_description']}}</p>
             <p>"{{bar.reviews[0]['text']}}"</p>
 <!--            <b-button v-b-modal.modal-scrollable variant="primary" v-on:click="toggleComments(bar)">Voir les commentaires</b-button>-->
+            <b-button variant="danger" v-on:click="supprimerBarFavoris(n)"><b-icon-trash></b-icon-trash></b-button>
           </b-card>
         </b-card-group>
       </div>
@@ -99,6 +100,13 @@ export default {
           lng: position.coords.longitude
         };
       });
+    },
+    supprimerBarFavoris(n){
+      this.listeBars.splice(n, 1)
+      const parsed = JSON.stringify(this.listeBars);
+      localStorage.setItem('listeBars', parsed);
+      console.log(this.listeBars);
+      console.log(localStorage.listeBars);
     }
   }
 };

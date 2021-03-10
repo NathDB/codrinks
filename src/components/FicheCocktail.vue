@@ -72,6 +72,7 @@ export default {
             this.aperettesListe.sort(function(){return 0.5 - Math.random()})
             this.display = true
             console.log(this.aperettesListe.length)
+            this.aperettesListe.includes()
           }
         })
         .catch((e) => {

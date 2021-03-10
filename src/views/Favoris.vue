@@ -7,7 +7,7 @@
         <b-list-group-item class="d-flex justify-content-between">
           <b-avatar variant="info" :src="favori.strDrinkThumb" class="mr-3"></b-avatar>
           <span class="fav">{{ favori.strDrink }}</span>
-          <b-button variant="danger" v-on:click="supprimerFavoris(n)">Supprimer</b-button>
+          <b-button variant="danger" v-on:click="supprimerFavoris(n)"><b-icon-trash></b-icon-trash></b-button>
         </b-list-group-item>
       </b-list-group>
     </div>
