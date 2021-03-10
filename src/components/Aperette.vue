@@ -1,29 +1,23 @@
 <template>
   <div class="aperette">
-    <b-card
-        v-bind:title="aperette.nom"
-        tag="aperette"
-        style="max-width: 20rem;"
-        class="mb-2 d-flex"
-    >
+    <b-card>
+      <b-card-title>{{aperette.nom}}</b-card-title>
       <img class="img-thumbnail" :src="aperette.photo"/>
-      <b-button variant="primary" v-on:click="toggleRecette(aperette)">Voir recette</b-button>
-
+      <b-button v-if="aperette.recette === true" variant="primary" v-on:click="toggleRecette(aperette)">Voir recette</b-button>
     </b-card>
     <!--    Modal pour recette aperette-->
     <b-modal ref="my-modal" hide-footer v-bind:title="aperette.nom">
       <div class="d-block">
         <p>Ingrédients nécessaires</p>
-        <ul>
+        <ul v-for="ingredient in ingredients">
           <!--AFFICHAGE DES INGREDIENTS AVEC UNE BOUCLE
               <li v-for="n in 15">
               <p>{{cocktail_details.strIngredient}}{{n}}</p>
           </li>-->
-          <li>{{aperette.ingredients}}</li>
+          <li>{{ingredient.nom}}</li>
           <!--<li v-if="!{{cocktail_details.strIngredient7}}">{{cocktail_details.strIngredient7}}</li>-->
         </ul>
       </div>
-      <!--      <b-button class="mt-3" block @click="$bvModal.hide('bv-modal-example')">Close Me</b-button>-->
     </b-modal>
   </div>
 
@@ -42,32 +36,36 @@ export default {
   data(){
     return{
       aperettes:[],
-      aperette_details:[],
+      ingredients:[],
+      listeIngredientsRecette:[],
       display:false,
     }
   },
-  mounted() {
-    axios
-        .get('http://212.47.254.140:8000/aperettes')
-        .then(res => {
-          this.aperettes = res.data
-          this.display = true
-          console.log(res.data)
-        })
-  },
   methods: {
-    //Requete sur la table ingredient
-    toggleRecette(a) {
-      console.log(a)
-      let id = a.id;
-      console.log(id);
+    //fonction permettant de récupérer les noms des ingredients
+    getIngredient(ingredient){
       axios
-          .get('http://212.47.254.140:8000/aperettes')
+          .get('http://212.47.254.140:8000/ingredients/' + ingredient )
+          .then((response) => {
+            this.ingredients.push(response.data)
+          })
+          .catch(console.error)
+    },
+    //Affichage des ingredients de l'aperette
+    toggleRecette(a) {
+      let id = a.id;
+      this.ingredients.splice(0) //on vide la liste d'ingredients pour la remettre à jour (et éviter les doublons)
+      axios
+          .get('http://212.47.254.140:8000/aperettes/' + id)
           .then(res => {
-            this.aperettes = res.data
-            this.display = true
-            console.log(c.idDrink)
-            console.log(res.data)
+            //on ne récupère que les ingredients de l'aperette
+            //et on utilise la fonction getIngredient pour afficher le nom
+            res.data.ingredients.map((id) => this.getIngredient(id))
+            this.listeIngredientsRecette.value = {
+              id: res.data.id,
+              nom: res.data.nom,
+            };
+            console.log('listeIngredients' + this.listeIngredientsRecette.values())
           })
       this.$refs['my-modal'].show()
     },

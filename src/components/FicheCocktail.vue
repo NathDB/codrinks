@@ -22,9 +22,9 @@
             <!--<li v-if="!{{cocktail_details.strIngredient7}}">{{cocktail_details.strIngredient7}}</li>-->
           </ul>
         </div>
-      <b-card-group deck class="d-flex justify-content-center m-2 flex-md-wrap">
+      <b-card-group deck class="d-flex justify-content-center m-2 flex-wrap">
         <div v-if="display" v-for="aperette in aperettesListe">
-          <Aperette :aperette="aperette" />
+          {{i}}<Aperette :aperette="aperette" />
         </div>
       </b-card-group>
     </div>
@@ -38,13 +38,14 @@ import Aperette from "@/components/Aperette";
 export default {
   name: 'FicheCocktail',
   components: {Aperette},
-  component:{Aperette},
   data(){
     return{
       cocktail_details:[],
       aperettesListe:[],
       display:false,
-      id:this.$route.params.id
+      id:this.$route.params.id,
+      tableauRandom:[],
+      longueur: 28
     }
   },
   mounted() {
@@ -61,16 +62,27 @@ export default {
     //requete API pour recup les aperette en fonction de l'alcool du cocktail
     //ici faire la verif alcool aperette = alcool cocktail
     axios
-        .get('http://212.47.254.140:8000/aperettes')
+
+        .get('http://212.47.254.140:8000/aperettes' )
         .then(res => {
+          for (let i = 0; i < 3; i++) {
+            this.aperettesListe.length = 3
             this.aperettesListe = res.data
+            //tri random pour afficher 3 aperettes de façon aléatoire
+            this.aperettesListe.sort(function(){return 0.5 - Math.random()})
             this.display = true
-            console.log(this.aperettesListe)
+            console.log(this.aperettesListe.length)
+          }
         })
         .catch((e) => {
           this.error = "Erreur lors de la récupération des données.";
         });
 
+  },
+  methods: {
+    randomize() {
+
+    }
   }
 }
 </script>
